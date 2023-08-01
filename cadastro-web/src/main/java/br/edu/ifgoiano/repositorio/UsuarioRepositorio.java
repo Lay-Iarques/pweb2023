@@ -12,19 +12,9 @@ import br.edu.ifgoiano.entidade.Usuario;
 
 public class UsuarioRepositorio {
 
-	public static Connection conn;
-	
-	public UsuarioRepositorio() {
-		try {
-			conn = DriverManager.
-			        getConnection("jdbc:h2:~/usuariodb", "sa", "sa");
-			
-			System.out.println("Conexão realizada com sucesso!");
-			
-		} catch (SQLException e) {
-			System.out.println("Erro na conexão com o banco de dados.");
-			e.printStackTrace();
-		}
+	private Connection getConnection() throws SQLException {
+		return DriverManager.
+		        getConnection("jdbc:h2:~/usuariodb", "sa", "sa");
 	}
 	
 	public List<Usuario> listarUsuario(){
@@ -32,8 +22,9 @@ public class UsuarioRepositorio {
 		
 		String sql = "select id, nome, email, data_nascimento from usuario";
 		
-		try {
-			PreparedStatement pst = conn.prepareStatement(sql);
+		try (Connection conn = this.getConnection();
+				PreparedStatement pst = conn.prepareStatement(sql);
+				){
 			
 			ResultSet resultSet = pst.executeQuery();
 			
@@ -52,6 +43,27 @@ public class UsuarioRepositorio {
 		}
 		return lstUsuario;
 		
+	}
+
+	public void inserirUsuario(Usuario usuario) {
+		// TODO Auto-generated method stub
+		StringBuilder sql = new StringBuilder();
+		sql.append("insert into usuario");
+		sql.append(("nome, email, senha"));
+		sql.append("value(?, ?, ?)");
+		
+		
+		try(Connection conn = this.getConnection();
+			PreparedStatement pst = conn.prepareStatement(sql.toString())	
+			){
+			pst.execute();
+			
+			conn.commit();
+		} catch(SQLException e) {
+			System.out.println("Erro na inclusão de usuarios");
+			e.printStackTrace();
+		}
+				
 	}
 	
 	
