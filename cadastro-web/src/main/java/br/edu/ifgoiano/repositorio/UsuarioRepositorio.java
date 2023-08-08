@@ -48,14 +48,14 @@ public class UsuarioRepositorio {
 	public void inserirUsuario(Usuario usuario) {
 		// TODO Auto-generated method stub
 		StringBuilder sql = new StringBuilder();
-		sql.append("insert into usuario");
-		sql.append(("nome, email, senha"));
-		sql.append("value(?, ?, ?)");
-		
+		sql.append("insert into usuario (nome, email, senha) values (?, ?, ?) ");		
 		
 		try(Connection conn = this.getConnection();
 			PreparedStatement pst = conn.prepareStatement(sql.toString())	
 			){
+			pst.setString(1, usuario.getNome());
+			pst.setString(2, usuario.getEmail());
+			pst.setString(3, usuario.getSenha());
 			pst.execute();
 			
 			conn.commit();
@@ -63,8 +63,11 @@ public class UsuarioRepositorio {
 			System.out.println("Erro na inclusão de usuarios");
 			e.printStackTrace();
 		}
+		
 				
 	}
+	
+	
 	
 	
 	
