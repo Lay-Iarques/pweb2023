@@ -9,11 +9,11 @@
 <body>
 <body>
 
-    <form action="login" method="post">
+    <form action="alterarUsuario" method="post">
         <label for="nome">Nome:</label>
-        <input type="nome" name="nome" id="nome">
+        <input type="nome" name="nome" id="nome" value="${usuario.nome}">
         <label for="email">E-mail:</label>
-        <input type="text" name="email" id="email">
+        <input type="text" name="email" id="email" value="${usuario.email}">
         <label for="senha">Senha:</label>
         <input type="password" name="senha" id="senha">        
     	<input type="submit" value="Entrar">

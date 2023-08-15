@@ -46,7 +46,7 @@ public class UsuarioRepositorio {
 	}
 
 	public void inserirUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
+
 		StringBuilder sql = new StringBuilder();
 		sql.append("insert into usuario (nome, email, senha) values (?, ?, ?) ");		
 		
@@ -62,24 +62,33 @@ public class UsuarioRepositorio {
 		} catch(SQLException e) {
 			System.out.println("Erro na inclusão de usuarios");
 			e.printStackTrace();
-		}
-		
-				
+		}	
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public Usuario obterUsuario(Integer id){
+		
+		String sql = "select nome, email, senha from usuario where id = ?";
+		
+		try (Connection conn = this.getConnection();
+				PreparedStatement pst = conn.prepareStatement(sql.toString())) { 
+			pst.setInt(1, id);
+			
+			ResultSet resultSet = pst.executeQuery();
+			
+			if(resultSet.next()) {
+				Usuario usuario = new Usuario();
+				usuario.setId(id);
+				usuario.setNome(resultSet.getString("nome"));
+				usuario.setEmail(resultSet.getString("email"));	
+				usuario.setSenha(resultSet.getString("senha"));				
+
+				return usuario;
+			}
+		}catch(SQLException e) {
+			System.out.println("Erro na consulta de usuarios");
+			e.printStackTrace();
+		}
+		
+		throw new RuntimeException("Usuario não encontrado!");
+	}
 }
