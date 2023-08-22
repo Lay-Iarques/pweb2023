@@ -91,4 +91,24 @@ public class UsuarioRepositorio {
 		
 		throw new RuntimeException("Usuario não encontrado!");
 	}
+	
+	public void alterarUsuario(Usuario usuario) {
+
+		String sql = "update usuario set nome = ?, email = ?, senha = ? where id = ?";
+		
+		try(Connection conn = this.getConnection();
+			PreparedStatement pst = conn.prepareStatement(sql.toString())	
+			){
+			pst.setString(1, usuario.getNome());
+			pst.setString(2, usuario.getEmail());
+			pst.setString(3, usuario.getSenha());
+			pst.setInt(4, usuario.getId());
+			pst.execute();
+			
+			conn.commit();
+		} catch(SQLException e) {
+			System.out.println("Erro na alterção de usuarios");
+			e.printStackTrace();
+		}	
+	}
 }

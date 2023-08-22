@@ -1,8 +1,6 @@
 package br.edu.ifgoiano.controle;
 
 import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +22,35 @@ public class AlteraUsuarioServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Integer id = Integer.valueOf(req.getParameter("id"));
 		
+		String senha02 = req.getParameter("senha02");
+		
 		Usuario usuario = new Usuario();
+		
+		usuario.setId(id);
+		usuario.setNome(req.getParameter("nome"));
+		usuario.setEmail(req.getParameter("email"));
+		usuario.setSenha(req.getParameter("senha01"));
+		
+		
+		if (usuario.getSenha().equals(senha02)) {
+			UsuarioRepositorio repositorio = new UsuarioRepositorio();
+			repositorio.alterarUsuario(usuario);
+			
+			resp.sendRedirect("cadastrarUsuario");
+		}else {
+			String mensagem = usuario.getNome().concat(", as senhas informadas não são iguais!");
+			
+			req.setAttribute("mensagem", mensagem);
+			req.setAttribute("usuario", usuario);
+			
+			req.getRequestDispatcher("usuarioAtualizar.jsp").forward(req, resp);
+			
+			
+		}
+
+		
+		
+		
 	}
 	
 	
